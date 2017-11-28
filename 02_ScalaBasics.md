@@ -7,9 +7,9 @@ nested ifs like the following:
 String housenumber = null;
 User user = new User();
 if(user != null){
-  Adress adress = user.getAdress();
-  if(adress != null){
-    housenumber = adress.getHousenumber();
+  Address address = user.getAddress();
+  if(address != null){
+    housenumber = address.getHousenumber();
   }
 }
 ```
