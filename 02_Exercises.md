@@ -29,7 +29,7 @@ Print the HTTP Response of a GET Rquest to https://my-json-server.typicode.com/a
 Documentation of Future:
 http://www.scala-lang.org/api/2.12.3/scala/concurrent/Future.html
 
-### Option Exercise
+### Monad Exercise
 
 
 
