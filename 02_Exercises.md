@@ -30,6 +30,10 @@ Documentation of Future:
 http://www.scala-lang.org/api/2.12.3/scala/concurrent/Future.html
 
 ### Monad Exercise
+KP_MonadsInScala_Exc\src\main\scala.
+The project strucutre contains a data model with the classes _Customer_, _Invoice_ and _InvoiceItem_. Those classes are already implemented and you just can use them. Furthermore there are two Service classes for requesting Invoices and Customers from a JSON Webservice. The first task is to implement the methods _requestInvoiceByID_ in _requestCustomerByID_. The implemented mehtod _requestAllInvoices_ in InvoiceService.sc can be used as an example.
+After that implement the _requestInvoiceCustomerDataWithoutMonad_ method in Program.sc with flatMap and without using a Monad.
+
 
 
 
