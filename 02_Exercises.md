@@ -23,6 +23,13 @@ Documentation sum method of a List:
 http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#sum:A
 
 #### Future
+Navigate to KP_MonadsInScala_Exc\src\Scala_Basics\Future.sc and wrap a HTTP call in a simple Future.
+Print the HTTP Response of a GET Rquest to https://my-json-server.typicode.com/anfalt/MonadsInScala/Invoices by using the onComplete Method of Future
+
+Documentation of Future:
+http://www.scala-lang.org/api/2.12.3/scala/concurrent/Future.html
+
+### Option Exercise
 
 
 
