@@ -98,4 +98,5 @@ https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e
 Blog Post by Sinisa Louc<br>
 https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534
 
-
+Monads do not compose<br>
+http://blog.tmorris.net/posts/monads-do-not-compose/
