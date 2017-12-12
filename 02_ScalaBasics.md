@@ -53,6 +53,11 @@ user3.getAddress().flatMap(_.getHouseNumber()) //None
 ```
 
 ### Future
+Asynchronous programming Java with threads.
+
+Exception Handling in asynchronous executed threads:
+
+
 The _Future_ type is used to run programm steps concurrently. By creating a Future it
 starts running asynchronous and will return a value in some time. The _onComplete_
 function accepts a callback, that gets executed, when the asynchronous function has
