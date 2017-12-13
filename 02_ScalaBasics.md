@@ -75,6 +75,7 @@ Asynchronous programming with threads.
     def getValue() = {
          resultValue
     }
+  }
 ```
 
 Exception Handling in asynchronous executed threads:
