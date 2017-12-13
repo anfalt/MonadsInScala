@@ -76,6 +76,13 @@ Asynchronous programming with threads.
          resultValue
     }
   }
+  
+thread.start()
+println("This gets printed before the values of a")
+thread.join()
+println("This gets printed after the values of a")
+val finalA = thread.getValue();
+println("Final value of a: " + finalA)
 ```
 
 Exception Handling in asynchronous executed threads:
