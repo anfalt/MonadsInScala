@@ -53,7 +53,29 @@ user3.getAddress().flatMap(_.getHouseNumber()) //None
 ```
 
 ### Future
-Asynchronous programming Java with threads.
+Asynchronous programming with threads.
+´´´scala
+ val thread = new Thread {
+
+    var resultValue = 0;
+
+    override def run = {
+    resultValue =  func(0)
+      println("result: " + resultValue)
+    }
+    def func(a:Int): Int ={
+      if(a<20){
+        println("Value of a: " + a);
+        func(a+1)
+      }else{
+        a
+      }
+    }
+
+    def getValue() = {
+         resultValue
+    }
+´´´
 
 Exception Handling in asynchronous executed threads:
 
