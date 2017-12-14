@@ -5,7 +5,7 @@ this type with _Nullables_ in Java. To check the value of a nullable type, you o
 nested ifs like the following:
 ```Java
 String housenumber = null;
-User user = userServce.getUserByID(1);
+User user = userService.getUserByID(1);
 if(user != null){
   Address address = user.getAddress();
   if(address != null){
