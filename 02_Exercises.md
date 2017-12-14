@@ -4,11 +4,7 @@ https://github.com/anfalt/MonadsInScala/raw/master/KP_MonadsInScala_Exc.zip
 
 ### Scala Basics
 
-#### FlatMap
-Navigate to KP_MonadsInScala_Exc\src\Scala_Basics\FlatMap.sc and implement the methods _splitWordsInUpperCaseChars_ and _increaseAndDecreaseListItem_ by using flatMap.
 
-Documentation flatMap of List:
-http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#flatMap[B](f:A=>scala.collection.GenTraversableOnce[B]):List[B]
 
 
 #### Option
