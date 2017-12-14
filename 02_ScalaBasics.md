@@ -53,7 +53,9 @@ user3.getAddress().flatMap(_.getHouseNumber()) //None
 ```
 
 ### Future
-Asynchronous programming with threads.
+The _Future_ type is used to run programm steps concurrently. By creating a Future it
+starts running asynchronous and will return a value in some time. You may known asynchronous programming with threads, so we start with a little comparison Threads vs Futures.
+Asynchronous programming with threads:
 ```scala
  val thread = new Thread {
 
@@ -85,13 +87,40 @@ val finalA = thread.getValue();
 println("Final value of a: " + finalA)
 ```
 
+Basically the same logic implemented with a future:
+
+```scala
+val f = Future {
+    def func(a:Int): Int ={
+      println("Value of a: " + a);
+      if(a<20){
+        println("Value of a: " + a);
+        func(a+1)
+      }else{
+        a
+      }
+    }
+    println("This gets printed before the values of a")
+    func(0)
+    Thread.sleep(3000)
+  }
+
+  f.onComplete {
+    case Success(value) => println(value)
+    case Failure(e) => e.printStackTrace()
+  }
+
+  println("This gets exectuded befor the values of a")
+```
+
+The _onComplete_ function accepts a callback, that gets executed, when the asynchronous function has
+finished. The result value can be an instance of _Success_ or _Failure_ class, depending on whether the request was successful or not. 
+
+
 Exception Handling in asynchronous executed threads:
 
 
-The _Future_ type is used to run programm steps concurrently. By creating a Future it
-starts running asynchronous and will return a value in some time. The _onComplete_
-function accepts a callback, that gets executed, when the asynchronous function has
-finished. The result value can be an instance of _Success_ or _Failure_ class, depending on whether the request was successful or not. A simple HTTP GET Request could be implemented like this.
+A simple HTTP GET Request could be implemented like this.
 
 ```scala
 val f = Future {
