@@ -115,9 +115,33 @@ val f = Future {
 
 The _onComplete_ function accepts a callback, that gets executed, when the asynchronous function has
 finished. The result value can be an instance of _Success_ or _Failure_ class, depending on whether the request was successful or not. 
+As you can see the Error and Exception Handling in Futures is pretty straight forward. Exception Handling in Threads is not as easy:
+
 
 
 Exception Handling in asynchronous executed threads:
+
+```scala
+ val excHandler = new Thread.UncaughtExceptionHandler() {
+    override def uncaughtException(th: Thread, ex: Throwable): Unit = {
+      System.out.println("Exception Handler: Uncaught exception: " + ex)
+    }
+  }
+
+  val thread = new Thread {
+
+
+
+    override def run = {
+      val a =  1/0
+      println("value of a: " + a)
+
+    }
+
+  }
+  thread.setUncaughtExceptionHandler(excHandler)
+  thread.start()
+```
 
 
 A simple HTTP GET Request could be implemented like this.
