@@ -56,6 +56,8 @@ user3.getAddress().flatMap(_.getHouseNumber()) //None
 One disadvatage of the Option type is that you get no feedback why the wrapped value is None. In some cases you need to know why there is no value inside the Option. An example could  be  you try to request a user from a user service. If the returned Option contains None, you don´t know if the user doesn´t exist, or if a server or network error occurred. For this cases the _Either_ type exists.
 Either provides the same funtionality like Option, None and Some are called Left and Right. The Difference is, that Left can contain a value, that can describes the reason why not the expected value is inside. The expected value would be inside Right. 
 
+[Exercise](https://github.com/anfalt/MonadsInScala/blob/master/02_Exercises.md#option)
+
 ### Future
 The _Future_ type is used to run programm steps concurrently. By creating a Future it
 starts running asynchronous and will return a value in some time. You may known asynchronous programming with threads, so we start with a little comparison Threads vs Futures.
