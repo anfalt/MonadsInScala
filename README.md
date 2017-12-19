@@ -147,15 +147,11 @@ Exception Handling in asynchronous executed threads:
   }
 
   val thread = new Thread {
-
-
-
     override def run = {
       val a =  1/0
       println("value of a: " + a)
 
     }
-
   }
   thread.setUncaughtExceptionHandler(excHandler)
   thread.start()
