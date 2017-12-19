@@ -429,7 +429,7 @@ case class FutOpt[A](value: Future[Option[A]]) {
 Now we can try again to get the city from a user and running the code with the wrapper class. You just have to use the FutOpt in the for-comprehension and use .value to get the result.
 
 ```scala
-val f: Future[Option[String]] =
+val f: FutOpt[String] =
     for {
         user    <- FutOpt(getUser("Andreas"))
         address <- FutOpt(getAddress(user))
