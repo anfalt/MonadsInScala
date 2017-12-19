@@ -543,6 +543,6 @@ Monads do not compose<br>
 Functors, Applicatives, And Monads In Pictures<br>
 [http://adit.io/posts/2013-04-17-functors,\_applicatives,\_and\_monads_in_pictures.html](http://adit.io/posts/2013-04-17-functors,\_applicatives,\_and_monads_in_pictures.html)<br>
 
-Monads do not compose
+Monads do not compose<br>
 [http://blog.tmorris.net/posts/monads-do-not-compose/](http://blog.tmorris.net/posts/monads-do-not-compose/)
 
