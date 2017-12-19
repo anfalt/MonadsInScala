@@ -1,5 +1,7 @@
 ## Monads in Scala
 
+[Exercise](https://github.com/anfalt/MonadsInScala/blob/master/02_Exercises.md)
+
 In this blog we get to know more about Monads. 
 
 Monads are derived from category theory in mathematics. They are commonly used in programming to mean higher order functions. 
@@ -280,7 +282,7 @@ val l5 = l1.flatMap(x=>List(x + "a"))
 
 Therefore flatMap is more powerful then map because it will chain operations together. The map function is just a subset of flatMap.
 
-The synthetic sugar of a flatMap method is to write it as a for-comprehension with the symbol ```<-```. Notice that it is not comparable with a for-loop.
+The syntactic sugar of a flatMap method is to write it as a for-comprehension with the symbol ```<-```. Notice that it is not comparable with a for-loop.
 
 ```Scala
 l1.flatMap(x => l2.map(y => x + y ) )
@@ -368,7 +370,7 @@ val getCity: Future[Option[String]] =
         maybeUser  <- getUser("Andreas")
         maybeCity  <- maybeUser match{
             case Some(user) => getAddress(user).map(_.map(_.city))
-            case None => Future.successful(Node)
+            case None => Future.successful(None)
         }
     } yield maybeCity
 ```
@@ -532,5 +534,17 @@ Monad transformers down to earth by Gabriele Petronella:</br>
 Blog Post by Sinisa Louc</br>
 [https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534](https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534)</br>
 
-Monads do not compose</br>
-[http://blog.tmorris.net/posts/monads-do-not-compose/](http://blog.tmorris.net/posts/monads-do-not-compose/)</br>
+
+Blog Posts by Darren Wilkinson<br>
+[https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/](https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/)</br>
+[https://darrenjw.wordpress.com/2015/11/16/hofs-closures-partial-application-and-currying-to-solve-the-function-environment-problem-in-scala/](https://darrenjw.wordpress.com/2015/11/16/hofs-closures-partial-application-and-currying-to-solve-the-function-environment-problem-in-scala/)</br>
+
+Monads do not compose<br>
+[http://blog.tmorris.net/posts/monads-do-not-compose/](http://blog.tmorris.net/posts/monads-do-not-compose/)<br>
+
+Functors, Applicatives, And Monads In Pictures<br>
+[http://adit.io/posts/2013-04-17-functors,\_applicatives,\_and\_monads_in_pictures.html](http://adit.io/posts/2013-04-17-functors,\_applicatives,\_and_monads_in_pictures.html)<br>
+
+Monads do not compose<br>
+[http://blog.tmorris.net/posts/monads-do-not-compose/](http://blog.tmorris.net/posts/monads-do-not-compose/)
+
