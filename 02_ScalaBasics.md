@@ -368,7 +368,7 @@ val getCity: Future[Option[String]] =
         maybeUser  <- getUser("Andreas")
         maybeCity  <- maybeUser match{
             case Some(user) => getAddress(user).map(_.map(_.city))
-            case None => Future.successful(Node)
+            case None => Future.successful(None)
         }
     } yield maybeCity
 ```
@@ -511,5 +511,12 @@ https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e
 Blog Post by Sinisa Louc<br>
 https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534
 
+Blog Posts by Darren Wilkinson<br>
+https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/
+https://darrenjw.wordpress.com/2015/11/16/hofs-closures-partial-application-and-currying-to-solve-the-function-environment-problem-in-scala/
+
 Monads do not compose<br>
 http://blog.tmorris.net/posts/monads-do-not-compose/
+
+Functors, Applicatives, And Monads In Pictures<br>
+http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html
