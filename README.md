@@ -147,11 +147,15 @@ Exception Handling in asynchronous executed threads:
   }
 
   val thread = new Thread {
+
+
+
     override def run = {
       val a =  1/0
       println("value of a: " + a)
 
     }
+
   }
   thread.setUncaughtExceptionHandler(excHandler)
   thread.start()
@@ -496,16 +500,37 @@ val f: OptionT[Future, String] =
 val getCity: OptionT[Future, String] = f.value
 ```
 
+Hint: OptionT provides several methods to transform types into the expected type:
 
+```scala
+def getUser(id: String): Future[Option[User]] = ... 
+def getAge(user: User): Future[Int] = ... 
+def getNickname(user: User): Option[String] = ...
+
+
+val getNickname: OptionT[Future, String] =
+    for {
+        user <- OptionT(getUser("123"))
+        age  <- OptionT.liftF(getAge(user))   
+        name <- OptionT.fromOption(getName(user))
+    } yield name.nickname
+```
+
+
+### Monad Best Practise
+- Don´t stack more than two monads 
+- Don´t expose Monads in a public API
+- Monads influence can reduce the performance of your code
+- Use Monads only for local optimization, not as a global/architectural solution
 
 
 ## Links
-Monad transformers down to earth by Gabriele Petronella:<br>
-https://www.youtube.com/watch?v=jd5e71nFEZM&feature=youtu.be<br>
-https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7
+Monad transformers down to earth by Gabriele Petronella:</br>
+[https://www.youtube.com/watch?v=jd5e71nFEZM&feature=youtu.be](https://www.youtube.com/watch?v=jd5e71nFEZM&feature=youtu.be)</br>
+[https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7](https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7)</br>
 
-Blog Post by Sinisa Louc<br>
-https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534
+Blog Post by Sinisa Louc</br>
+[https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534](https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534)</br>
 
-Monads do not compose<br>
-http://blog.tmorris.net/posts/monads-do-not-compose/
+Monads do not compose</br>
+[http://blog.tmorris.net/posts/monads-do-not-compose/](http://blog.tmorris.net/posts/monads-do-not-compose/)</br>
