@@ -500,7 +500,28 @@ val f: OptionT[Future, String] =
 val getCity: OptionT[Future, String] = f.value
 ```
 
+Hint: OptionT provides several methods to transform types into the expected type:
 
+```scala
+def getUser(id: String): Future[Option[User]] = ... 
+def getAge(user: User): Future[Int] = ... 
+def getNickname(user: User): Option[String] = ...
+
+
+val getNickname: OptionT[Future, String] =
+    for {
+        user <- OptionT(getUser("123"))
+        age  <- OptionT.liftF(getAge(user))   
+        name <- OptionT.fromOption(getName(user))
+    } yield name.nickname
+```
+
+
+### Monad Best Practise
+- Don´t stack more than two monads 
+- Don´t expose Monads in a public API
+- Monads influence can reduce the performance of your code
+- Use Monads only for local optimization, not as a global/architectural solution
 
 
 ## Links
