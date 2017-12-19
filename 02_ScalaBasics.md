@@ -1,5 +1,7 @@
 ## Monads in Scala
 
+[Exercise](https://github.com/anfalt/MonadsInScala/blob/master/02_Exercises.md)
+
 In this blog we get to know more about Monads. 
 
 Monads are derived from category theory in mathematics. They are commonly used in programming to mean higher order functions. 
