@@ -37,8 +37,16 @@ Print the HTTP Response of a GET Rquest to https://my-json-server.typicode.com/a
 Documentation of Future:
 http://www.scala-lang.org/api/2.12.3/scala/concurrent/Future.html
 
-### Monad Exercise
-KP_MonadsInScala_Exc\src\main\scala.
+### ListOptMonad Exercise
+
+Open KP_MonadsInScala_Exc\src\Scala_Basics\5_ListOptionMonad.
+Implement the method _allGrandChildrenMonad_ by using the given ListOptMonad.
+The Method should return the same value like _allGrandChildren_
+
+
+
+### Main Exercise
+Open KP_MonadsInScala_Exc\src\main\scala.
 The project strucutre contains a data model with the classes _Customer_, _Invoice_ and _InvoiceItem_. Those classes are already implemented and you just can use them. Furthermore there are two Service classes for requesting Invoices and Customers from a JSON Webservice. The first task is to implement the methods _requestInvoiceByID_ in _requestCustomerByID_. The implemented mehtod _requestAllInvoices_ in InvoiceService.sc can be used as an example.
 After that implement the _requestInvoiceCustomerDataWithoutMonad_ method in Program.sc with flatMap and without using a Monad.
 The last exercise is to write the same method by using the _OptionT_ class of the Cats library.
