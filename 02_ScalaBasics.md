@@ -280,7 +280,7 @@ val l5 = l1.flatMap(x=>List(x + "a"))
 
 Therefore flatMap is more powerful then map because it will chain operations together. The map function is just a subset of flatMap.
 
-The synthetic sugar of a flatMap method is to write it as a for-comprehension with the symbol ```<-```. Notice that it is not comparable with a for-loop.
+The syntactic sugar of a flatMap method is to write it as a for-comprehension with the symbol ```<-```. Notice that it is not comparable with a for-loop.
 
 ```Scala
 l1.flatMap(x => l2.map(y => x + y ) )
