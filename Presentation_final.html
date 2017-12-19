@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Monads in Scala</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+        @import url(https://fonts.googleapis.com/css?family=Nunito);
+
+
+      body { font-family: 'Nunito'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Monads in Scala #
+
+---
+
+# Agenda #
+
+1. Functor
+
+2. Monads
+
+3. Option
+
+4. Future
+
+5. When do we need Monads?
+  5. Example
+  5. Wrapper class
+  5. OptionT
+
+
+---
+
+#Functor #
+
+*   Concept from category theory
+
+*   Comparable with wrappers
+
+*   Objects that can implement the **map** function:
+
+	-	Collections
+	-   Container
+	-   Values
+	-	Futures
+	-	Options
+
+---
+
+#Functor #
+
+
+a **map** is a higher order function
+	
+* takes one or more functions as arguments
+* returns a function as its result
+
+<br/>
+
+```scala
+val l1 = List(1,2,3) 
+//l1: List[Int] = List(1,2,3)
+
+val l2 = l1.map(x=>x+1) 
+//l2: List[Int] = List(2, 3, 4)
+```
+
+---
+
+# Functor #
+
+####What Functors do?
+
+<ol>
+<li> Transformation of contents</li>
+
+```scala
+Array(2).map(x => x + 3) 
+//res0: Array[Int] = Array(5) 
+```
+
+<li> Maintain structure</li>
+
+Functors need to be able to contain any object and maintain its structure
+
+
+
+<li> Return a new functor </li>
+
+```scala
+Array(2,3,4).map(x => x + 3).map(x => x *3).map(x => x – 1)
+//res1: Array[Int] = Array(14, 17, 20)
+```
+</ol>
+<br/>
+
+---
+
+# Functor #
+
+
+```scala
+Array(2).map(x => x + 3) 
+//res0: Array[Int] = Array(5) 
+```
+
+<img src="./Images/Functor_Easy.png" width="100%">
+
+---
+
+# Functor #
+
+
+```scala
+trait F[A] { 
+
+	def map(f: A => B): F[B] 
+}
+```
+
+```scala
+trait Array[Int] {
+    
+	def map(f : Int => Int): Array[Int]
+}
+```
+<img src="./Images/Functor_Easy.png" width="100%">
+
+
+---
+
+
+# Monads #
+
+
+*	Type of Functor
+
+* every Monad is a Functor, but not every Functor is a Monad
+
+*	implements the **flatMap** and **map** function
+
+
+---
+
+# Monads #
+
+```scala
+val l1 = List(1,2,3) 
+//l1: List[Int] = List(1,2,3)
+
+
+val l2 = l1.map { x => List(x-1, x+1) } 
+//l2: List[List[Int]] = List(List(0, 2), List(1, 3), List(2, 4))
+
+val l3 = l2.flatten
+//l3: List[Int] = List(0, 2, 1, 3, 2, 4)
+
+
+val l4 = l1.flatMap { x => List(x-1, x+1) } 
+//l4: List[Int] = List(0, 2, 1, 3, 2, 4)
+```
+
+---
+
+# Monads #
+
+```scala
+trait M[A] {
+    
+	def map(f: A => B): M[B] 
+
+	def flatMap(f: A => M[B]): M[B] 
+}
+```
+<br/>
+
+```scala
+	         map with A => M[B] 	        	        flatten
+M[A] -----------------------------------> M[M[B]] --------------------> M[B]
+
+
+
+			map with List => List[Int] 			  		flatten	
+List[Int] ------------------------------> List[List[Int]] ------------> List[Int]
+```
+
+---
+
+# Monads #
+
+* The content doesn‘t have to be the same type
+    * M[A] ---> M[A]
+    * M[A] ---> M[B] 
+
+```scala
+List[Int] ---> List[String]
+```
+
+```scala
+val l1 = List(1,2,3) 
+//l1: List[Int] = List(1,2,3)
+
+val l2 = l1.flatMap(x=>Set(x + "a"))
+//l2: List[String] = List(1a, 2a, 3a)
+
+```
+
+---
+
+# Monads #
+
+**flatMap** as a **for**-comprehension
+
+```scala
+val l1 = List(1,2)
+//l1: List[Int] = List(1,2)
+
+val l2 = List(3,4)
+//l2: List[Int] = List(3,4)
+
+
+l1.flatMap(x => l2.map(y => x + y ) )
+//res0: List[Int] = List(4, 5, 5, 6)
+
+
+for {
+    first  <- l1
+    second <- l2
+} yield first + second
+
+//res1: List[Int] = List(4, 5, 5, 6)
+```
+
+
+
+
+
+---
+
+
+
+#Option
+
+Java style of null-checking (before Java 8): 
+
+```java
+String housenumber = null;
+User user = userService.getUserByID(1);
+if(user != null){
+  Address address = user.getAddress();
+  if(address != null){
+    housenumber = address.getHousenumber();
+  }
+}
+```
+
+Every value needs to be null-checked to avoid NullPointerExceptions
+
+---
+
+#Option
+
+Option type in scala can either be an instance of the Some class or the None. 
+
+The constructor creates an instance of None if the given parameter is null, otherwise it creates an instance of Some.
+
+
+```scala
+val greeting: Option[String] = Some("Hello world")
+val greeting2: Option[String] = None
+
+val factoryGreeting: Option[String] = Option("Hello world")
+val factoryGreeting2: Option[String] = Option(null)
+
+factoryGreeting.map(println(_))
+factoryGreeting2.map(println(_))
+
+```
+
+
+
+---
+
+#Option
+
+The flatMap method applies the given function on the value of the Option if its not empty. 
+If the Option is empty the Option itself gets returned.
+
+```scala
+class User(var firstName:String, var lastName:String,var address:Option[Address]){
+  def getAddress():Option[Address] = return this.address
+}
+class Address(var city:String,var street:String,var houseNumber:Option[String]){
+  def getHouseNumber():Option[String] = return this.houseNumber
+}
+def address1 = new Address("Rosenheim","Hochschulstr.",Option("1b"))
+def address2 = new Address("Rosenheim","Hochschulstr.",Option(null))
+
+def user1 = new User("Max","Mustermann",Option(address1))
+def user2 = new User("Max","Mustermann",Option(address2))
+def user3 = new User("Max","Mustermann",Option(null))
+
+user1.getAddress().flatMap(_.getHouseNumber()) //Some(1b)
+user2.getAddress().flatMap(_.getHouseNumber()) //None
+user3.getAddress().flatMap(_.getHouseNumber()) //None 
+```
+Problem: No aditional feedback if type is None
+-> _Either_ type
+
+---
+
+# Option Exercise
+
+---
+
+
+#Future vs Thread
+
+Future type is used for asynchronous programming in scala.
+We all know asynchronous programming with threads:
+
+```scala
+val thread = new Thread {
+  var resultValue = 0;
+  override def run = {
+    resultValue =  func(0)
+  }
+  def func(a:Int): Int ={
+    if(a<20){func(a+1)}
+	else{a}
+  }
+
+  def getValue() = {
+    resultValue
+  }
+}
+
+thread.start()
+thread.join()
+val finalA = thread.getValue();
+
+
+```
+
+---
+
+#Future vs Thread
+
+Implementation with Future instead of Thread:
+
+```scala
+val f = Future {
+    def func(a:Int): Int ={
+      if(a<20){func(a+1)}
+      else{a}
+    }
+    func(0)
+  }
+
+f.onComplete {
+  case Success(value) => println(value)
+  case Failure(e) => e.printStackTrace()
+}
+  
+```
+_onComplete_ accepts a callback function, that gets executed when the Future has finished
+- Success => Future has finished as expected
+- Failure => Future has not finished as expected (e.g. an Exception was thrown)
+
+---
+
+#Exception handling in Threads
+
+Exception Handling in threads is more complicated
+
+```scala
+val excHandler = new Thread.UncaughtExceptionHandler() {
+  override def uncaughtException(th: Thread, ex: Throwable): Unit = {
+    System.out.println("Exception Handler: Uncaught exception: " + ex)
+  }
+}
+
+val thread = new Thread {
+  override def run = {
+    ...
+  }
+}
+thread.setUncaughtExceptionHandler(excHandler)
+thread.start()  
+```
+    
+  
+---
+
+#Future
+
+The Future type also provides a flatMap method, that allows us to control the execution order of multiple Futures.
+
+
+```scala
+def getUserID() : Future[String]
+def getUserAddress(userID: String) : Future[Address]
+def createInvoice(address:Address) : Future[Invoice]
+
+val futResult: Future[Invoice] =
+  getUserID().flatMap( userID =>
+    getUserAddress(userID).flatMap( address =>
+      createInvioce(address)
+    )
+)
+```
+
+---
+#Future Exercise
+
+
+
+
+
+
+
+---
+class: center, middle
+
+# When do we need monads? #
+
+
+---
+
+
+##Example
+We want to get the city from a user
+
+```scala
+def getUser(name: String): Future[User] = ...
+
+def getAddress(user: User): Future[Address] = ...
+```
+
+```scala
+val getCity: Future[String] =
+
+    getUser("Andreas").flatMap(
+        user => getAddress(user).map(
+            address => address.city))
+```
+
+
+
+
+---
+
+
+
+##Example
+
+We want to get the city from a user
+
+```scala
+def getUser(name: String): Future[User] = ...
+
+def getAddress(user: User): Future[Address] = ...
+```
+
+```scala
+val getCity: Future[String] =
+
+    getUser("Andreas").flatMap(
+        user => getAddress(user).map(
+            address => address.city))
+```
+
+<img src="./Images/issue-with-map.png" width="30%">
+
+<img src="./Images/flatmap.png" width="30%">
+
+Future[Future[Address]] => Future[Address]
+
+
+
+
+---
+
+
+
+##Example
+
+We want to get the city from a user
+
+```scala
+def getUser(name: String): Future[User] = ...
+
+def getAddress(user: User): Future[Address] = ...
+```
+
+```scala
+val getCity: Future[String] =
+
+    getUser("Andreas").flatMap(
+        user => getAddress(user).map(
+            address => address.city))
+```
+
+<br/>
+**Synthatic sugar: flatMap as a for-comprehnsion**
+
+```scala
+val getCity: Future[String] = 
+    for {
+        user        <- getUser("Andreas")
+        address     <- getAddress(user)
+    } yield address.city
+```
+
+
+---
+
+
+##Example
+
+
+```scala
+def getUser(name: String): Future[User] = ...
+
+def getAddress(user: User): Future[Address] = ...
+```
+
+```scala
+val getCity: Future[String] = 
+    for {
+        user        <- getUser("Andreas")
+        address     <- getAddress(user)
+    } yield address.city
+```
+
+**Problems:**
+* not every possible name corresponds to an existing user
+* "Andreas" isn't a user
+* a user has no address
+
+
+---
+
+##Example
+
+
+```scala
+def getUser(name: String): Future[User] = ...
+
+def getAddress(user: User): Future[Address] = ...
+```
+
+```scala
+val getCity: Future[String] = 
+    for {
+        user        <- getUser("Andreas")
+        address     <- getAddress(user)
+    } yield address.city
+```
+
+**Problems:**
+* not every possible name corresponds to an existing user
+* "Andreas" isn't a user
+* a user has no address
+
+**Solution:**
+* Option serves this purpose
+* changing the returntype: Future[Option[...]]
+
+
+
+---
+
+
+
+##Example
+
+```scala
+def getUser(name: String): Future[Option[User]] = ... 
+
+def getAddress(user: User): Future[Option[Address]] = ...
+```
+
+```scala
+val getCity: Future[Option[String]] = 
+    for {
+        user        <- getUser("Andreas")
+        address     <- getAddress(user)
+    } yield address.city
+    
+```
+
+
+
+---
+
+
+
+##Example
+
+```scala
+def getUser(name: String): Future[Option[User]] = ... 
+
+def getAddress(user: User): Future[Option[Address]] = ...
+```
+
+```scala
+val getCity: Future[Option[String]] = 
+    for {
+        user        <- getUser("Andreas")
+        address     <- getAddress(user)
+    } yield address.city
+    
+```
+<br/>
+
+**Compile error:**
+
+```scala
+error: type mismatch;
+ found   : Option[User]
+ required: User
+           address <- getAddress(user)
+```
+
+
+
+---
+
+
+
+##Example
+
+```scala
+def getUser(name: String): Future[Option[User]] = ... 
+
+def getAddress(user: User): Future[Option[Address]] = ...
+```
+
+```scala
+val getCity: Future[Option[String]] = 
+    for {
+        user        <- getUser("Andreas")
+        address     <- getAddress(user)
+    } yield address.city
+    
+```
+<br/>
+
+**Compile error:**
+
+```scala
+error: type mismatch;
+ found   : Option[User]
+ required: User
+           address <- getAddress(user)
+```
+
+```scala
+user    <- getUser("Andreas")   <=>   Option[User] <- Future[Option[User]] 
+```
+
+
+
+---
+
+
+
+##Example
+
+```scala
+def getUser(name: String): Future[Option[User]] = ... 
+
+def getAddress(user: User): Future[Option[Address]] = ...
+```
+
+```scala
+val getCity: Future[Option[String]] = 
+    for {
+        user        <- getUser("Andreas")
+        address     <- getAddress(user)
+    } yield address.city
+    
+```
+<br/>
+
+**Compile error:**
+
+```scala
+error: type mismatch;
+ found   : Option[User]
+ required: User
+           address <- getAddress(user)
+```
+
+```scala
+user    <- getUser("Andreas")   <=>   Option[User] <- Future[Option[User]] 
+
+address <- getAddress(user)     <=>   address <- getAddress(Option[User]) //ERROR            
+```
+
+
+
+---
+
+
+
+###Trying to solve the problem:
+
+**1. Example:**
+    
+```scala
+val getCity: Future[Option[String]] =
+
+  getUser("Andreas").flatMap {
+        case Some(user) => getAddress(user).map(address => address.city)
+        case None => Future.successful(None)
+  }  
+```
+
+<br/>
+
+**2. Example:**
+
+```scala
+val getCity: Future[Option[String]] = 
+    for {
+        maybeUser  <- getUser("Andreas")
+        maybeCity  <- maybeUser match{
+            case Some(user) => getAddress(user).map(_.map(_.city))
+            case None => Future.successful(None)
+        }
+    } yield maybeCity
+```
+
+
+
+---
+
+
+
+### What we really want:
+
+```scala
+def city: Future[Option[String]] =
+
+  for {
+    user    <- maybeUser    <- getUser("Andreas")
+    address <- maybeAddress <- getAddress(user)
+    
+  } yield address.city
+```
+
+```scala
+        user        <-       maybeUser       <-       getUser("Andreas")
+
+
+"Andreas" = User <------ Option["Andreas"] <------ Future[Option["Andreas"]]
+```
+
+* double flatMap 
+* First extract from the Future and then from the Option
+* Solution -> Wrapper Class
+
+
+---
+
+
+
+
+
+## Wrapper class 
+
+=> generate a class with its own **map** and **flatMap** methods
+
+
+```scala
+trait M[A] {
+    
+	def map(f: A => B): M[B] 
+	
+	def flatMap(f: A => M[B]): M[B] 
+}
+```
+
+
+
+---
+
+
+
+## Wrapper class 
+
+##### wrapper class for Future[Option[A]]
+
+```scala
+trait M[A] {
+    
+	def map(f: A => B): M[B] 
+	
+	def flatMap(f: A => M[B]): M[B] 
+}
+```
+
+```scala
+case class FutOpt[A](value: Future[Option[A]]) {
+ 
+    def map[B](f: A => B): FutOpt[B] = FutOpt(value.map(optA => optA.map(f)))
+  
+    def flatMap[B](f: A => FutOpt[B]): FutOpt[B] = 
+    
+        FutOpt(value.flatMap(opt => opt match {
+            case Some(a) => f(a).value
+            case None => Future.successful(None)
+        }))
+}
+```
+
+
+
+---
+
+
+
+
+
+
+## Wrapper class 
+
+
+###Run with wrapper class
+
+```scala
+val f: FutOpt[String] =
+    for {
+        user    <- FutOpt(getUser("Andreas"))
+        address <- FutOpt(getAddress(user))
+    } yield address.city
+    
+    
+val getCity: Future[Option[String]] = f.value
+```
+
+---
+
+## Monad Exercise
+
+---
+
+## Wrapper class 
+
+##### wrapper class for List[Option[A]]
+
+
+
+```scala
+case class ListOpt[A](value: List[Option[A]]) {
+ 
+    def map[B](f: A => B): ListOpt[B] = ListOpt(value.map(optA => optA.map(f)))
+ 
+    def flatMap[B](f: A => ListOpt[B]): ListOpt[B] =
+    
+        ListOpt(value.flatMap(opt => opt match {
+            case Some(a) => f(a).value
+            case None => List(None)
+        }))
+}
+```
+
+
+---
+## Wrapper class 
+##### wrapper class for Future[Option[A]]
+
+
+```scala
+case class FutOpt[A](value: Future[Option[A]]) {
+ 
+    def map[B](f: A => B): FutOpt[B] = FutOpt(value.map(optA => optA.map(f)))
+  
+    def flatMap[B](f: A => FutOpt[B]): FutOpt[B] = 
+    
+        FutOpt(value.flatMap(opt => opt match {
+            case Some(a) => f(a).value
+            case None => Future.successful(None)
+        }))
+}
+```
+
+
+
+---
+
+
+## Wrapper class
+
+* There is no knowledge about the 'outer' monad (Future or List) required
+* The 'outer' Monad can be any type of structure as long as we can map and flatMap over it
+* It's a generic data structure that wraps any monad around an Option
+
+
+-> OptionT
+
+---
+
+
+
+##OptionT
+
+* OptionT has two type parameter F and A : **OptionT[F, A]**
+
+* F is the wrapping Monad 
+
+* A  is the type inside Option
+
+* OptionT[F, A] is a flat version of F[Option[A]] which is a Monad itself
+
+* has a map and flatMap method
+
+* library: cats
+
+
+
+<br/>
+
+**General:**
+
+Foo[Bar[X]] => BarT[Foo, X]
+
+
+
+
+---
+
+
+
+##OptionT
+
+Notice: OptionT is a monad => use for comprehension
+
+```scala
+import cats.data.OptionT
+import cats.std.future._
+ ```
+ 
+ 
+ ```scala
+def getUser(name: String): Future[Option[User]] = ...
+def getAddress(user: User): Future[Option[Address]] = ...
+ 
+val f: OptionT[Future, String] =
+    for {
+        user    <- OptionT(getUser("Andreas"))
+        address <- OptionT(getAddress(user))
+    } yield address.city
+```
+
+```scala
+val getCity: Future[Option[String]] = f.value
+```
+
+
+
+
+---
+
+##OptionT
+
+```scala
+def getUser(name: String): OptionT[Future, User] = OptionT { ... }
+
+def getAddress(user: User): OptionT[Future, Address] = OptionT{ ... }
+```
+
+```scala
+val f: OptionT[Future, String] =
+    for {
+        user <- getUser("Andreas")
+        address <- getAddress(user)
+    } yield address.city
+```
+    
+```scala
+val getCity: OptionT[Future, String] = f.value
+```
+
+
+
+---
+
+
+
+##OptionT
+
+**The return type has to be F[Option[A]]**
+
+Example that doesn't work:
+
+```scala
+def getUser(id: String): Future[Option[User]] = ... 
+def getAge(user: User): Future[Int] = ... 
+def getNickname(user: User): Option[String] = ...
+
+
+val getNickname: OptionT[Future, String] =
+    for {
+        user <- OptionT(getUser("123"))
+        age  <- OptionT(getAge(user))    //Error
+        name <- OptionT(getName(user))  //Error
+    } yield name.nickname
+```
+
+
+---
+
+
+
+##OptionT
+
+
+
+```scala
+def getUser(id: String): Future[Option[User]] = ... 
+def getAge(user: User): Future[Option[Int]] = ... 
+def getNickname(user: User): Future[Option[String]] = ...
+
+
+val getNickname: OptionT[Future, String] =
+    for {
+        user <- OptionT(getUser("123"))
+        age  <- OptionT(getAge(user))
+        name <- OptionT(getName(user))
+    } yield name.nickname
+```
+
+---
+
+##OptionT
+
+
+
+```scala
+def getUser(id: String): Future[Option[User]] = ... 
+def getAge(user: User): Future[Int] = ... 
+def getNickname(user: User): Option[String] = ...
+
+
+val getNickname: OptionT[Future, String] =
+    for {
+        user <- OptionT(getUser("123"))
+        age  <- OptionT.liftF(getAge(user))   
+        name <- OptionT.fromOption(getName(user))
+    } yield name.nickname
+```
+
+---
+
+##Exercise
+
+---
+
+
+
+##Monads Best Practices
+
+- Don´t stack more than two monads 
+- Don´t expose Monads in a public API
+- Monads influence can reduce the performance of your code
+- Use Monads only for local optimization, not as a global/architectural solution
+
+
+
+
+
+
+
+
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
