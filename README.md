@@ -529,14 +529,14 @@ val getNickname: OptionT[Future, String] =
 ## Links
 Monad transformers down to earth by Gabriele Petronella:</br>
 [https://www.youtube.com/watch?v=jd5e71nFEZM&feature=youtu.be](https://www.youtube.com/watch?v=jd5e71nFEZM&feature=youtu.be)</br>
-[https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7](https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7)</br>
+[https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7](https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7)
 
 Blog Post by Sinisa Louc</br>
 [https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534](https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534)</br>
 
 
-Blog Posts by Darren Wilkinson<br>
-[https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/](https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/)</br>
+Blog Posts by Darren Wilkinson
+[https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/](https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/)
 [https://darrenjw.wordpress.com/2015/11/16/hofs-closures-partial-application-and-currying-to-solve-the-function-environment-problem-in-scala/](https://darrenjw.wordpress.com/2015/11/16/hofs-closures-partial-application-and-currying-to-solve-the-function-environment-problem-in-scala/)</br>
 
 Monads do not compose<br>
