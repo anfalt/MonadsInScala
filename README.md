@@ -527,7 +527,7 @@ val getNickname: OptionT[Future, String] =
 
 
 ## Links
-Monad transformers down to earth by Gabriele Petronella:
+Monad transformers down to earth by Gabriele Petronella:<br>
 [https://www.youtube.com/watch?v=jd5e71nFEZM&feature=youtu.be](https://www.youtube.com/watch?v=jd5e71nFEZM&feature=youtu.be)
 [https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7](https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7)
 
