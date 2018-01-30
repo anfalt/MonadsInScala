@@ -532,7 +532,7 @@ Monad transformers down to earth by Gabriele Petronella:<br>
 [https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7](https://blog.buildo.io/monad-transformers-for-the-working-programmer-aa7e981190e7)
 
 Blog Post by Sinisa Louc
-[https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534](https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534)</br>
+[https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534](https://medium.com/@sinisalouc/demystifying-the-monad-in-scala-cc716bb6f534)<br>
 
 
 Blog Posts by Darren Wilkinson<br>
