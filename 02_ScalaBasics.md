@@ -536,8 +536,8 @@ Blog Post by Sinisa Louc<br>
 
 
 Blog Posts by Darren Wilkinson<br>
-[https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/](https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/)</br>
-[https://darrenjw.wordpress.com/2015/11/16/hofs-closures-partial-application-and-currying-to-solve-the-function-environment-problem-in-scala/](https://darrenjw.wordpress.com/2015/11/16/hofs-closures-partial-application-and-currying-to-solve-the-function-environment-problem-in-scala/)</br>
+[https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/](https://darrenjw.wordpress.com/2016/04/15/first-steps-with-monads-in-scala/)<br>
+[https://darrenjw.wordpress.com/2015/11/16/hofs-closures-partial-application-and-currying-to-solve-the-function-environment-problem-in-scala/](https://darrenjw.wordpress.com/2015/11/16/hofs-closures-partial-application-and-currying-to-solve-the-function-environment-problem-in-scala/)<br>
 
 Monads do not compose<br>
 [http://blog.tmorris.net/posts/monads-do-not-compose/](http://blog.tmorris.net/posts/monads-do-not-compose/)<br>
